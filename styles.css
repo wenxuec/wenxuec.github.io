@@ -285,98 +285,65 @@ nav {
     font-weight: 500;
 }
 
-/* Publications */
-.publications-list {
+/* Publications - Compact */
+.publications-compact {
     max-width: 900px;
     margin: 2rem auto 0;
 }
 
-.publication-item {
-    background: white;
-    padding: 1.5rem 2rem;
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
-    border-left: 4px solid #38bdf8;
+.pub-item {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-.publication-item.featured-pub {
-    border-left-color: #0369a1;
-    background: linear-gradient(90deg, #f0f9ff 0%, white 20%);
+.pub-item:last-child {
+    border-bottom: none;
 }
 
-.pub-type {
-    display: inline-block;
-    background: #0369a1;
-    color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-}
-
-.publication-item h4 {
+.pub-item h4 {
     color: #0c4a6e;
-    font-size: 1.05rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
     line-height: 1.4;
 }
 
-.publication-authors {
+.pub-item p {
     color: #64748b;
     font-size: 0.9rem;
-    margin-bottom: 0.3rem;
+    line-height: 1.5;
 }
 
-.publication-venue {
+.pub-item strong {
+    color: #0c4a6e;
+}
+
+.pub-item em {
     color: #0369a1;
-    font-weight: 500;
-    font-size: 0.9rem;
 }
 
-.publication-link {
-    display: inline-block;
-    margin-top: 0.75rem;
+.pub-item a {
     color: #0284c7;
     text-decoration: none;
-    font-size: 0.9rem;
     font-weight: 500;
 }
 
-.publication-link:hover {
+.pub-item a:hover {
     text-decoration: underline;
 }
 
-/* Skills Section */
+/* Skills Section - Inline */
 .skills-section {
     background: #f8fafc;
+    padding: 3rem 2rem;
 }
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    max-width: 900px;
-    margin: 2rem auto 0;
-}
-
-.skill-category {
-    text-align: center;
-}
-
-.skill-category h3 {
-    font-size: 1rem;
-    color: #0c4a6e;
-    margin-bottom: 1rem;
-}
-
-.skills-container {
+.skills-inline {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.75rem;
+    max-width: 800px;
+    margin: 1.5rem auto 0;
 }
 
 .skill-tag {
