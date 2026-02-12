@@ -28,46 +28,117 @@
         </div>
 
         <div class="project-content">
+            <!-- Overview -->
             <section class="project-section">
                 <h2>Overview</h2>
-                <p>This research develops and applies Bayesian data assimilation methods to improve predictions of Arctic glacier mass balance. By combining observational data with physical models through ensemble-based techniques, we can better understand glacier dynamics and quantify uncertainty in our predictions.</p>
+                <p>This research develops Bayesian data assimilation methods to improve predictions of Arctic glacier mass balance by optimally combining observational data with physical models.</p>
             </section>
 
+            <!-- Workflow Diagram -->
             <section class="project-section">
-                <h2>Methodology</h2>
-                <p>The project employs <strong>Observing System Simulation Experiments (OSSE)</strong> to evaluate data assimilation strategies before applying them to real observations. Key methodological components include:</p>
-                <ul>
-                    <li><strong>Ensemble Kalman Filter:</strong> For optimal state estimation by combining model predictions with observations</li>
-                    <li><strong>Twin Experiments:</strong> Using synthetic observations generated from a known "truth" to validate assimilation schemes</li>
-                    <li><strong>Uncertainty Quantification:</strong> Rigorous estimation of prediction uncertainties through ensemble spread analysis</li>
-                    <li><strong>Large Ensemble Approach:</strong> Leveraging computational resources for robust statistical inference</li>
-                </ul>
+                <h2>Methodology Workflow</h2>
+                <div class="workflow-container">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Prior Model</h4>
+                            <p>Glacier dynamics simulation with initial parameter estimates</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Observations</h4>
+                            <p>Satellite & in-situ measurements from Svalbard</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Data Assimilation</h4>
+                            <p>Ensemble Kalman Filter combines model & data</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Posterior Analysis</h4>
+                            <p>Improved predictions with quantified uncertainty</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            <!-- Core Components -->
             <section class="project-section">
-                <h2>Application Domain</h2>
-                <p>The methods are applied to glacier systems in <strong>Svalbard</strong>, a critical region for understanding Arctic climate change. The research integrates:</p>
-                <ul>
-                    <li>Satellite remote sensing observations</li>
-                    <li>In-situ field measurements from expeditions</li>
-                    <li>Surface mass balance models</li>
-                    <li>Glacier dynamics simulations</li>
-                </ul>
+                <h2>Core Components</h2>
+                <div class="component-grid">
+                    <div class="component-card">
+                        <div class="component-icon">EnKF</div>
+                        <h4>Ensemble Kalman Filter</h4>
+                        <p>Optimal state estimation combining model predictions with observations</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon">OSSE</div>
+                        <h4>Twin Experiments</h4>
+                        <p>Synthetic observations to validate assimilation schemes</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon">UQ</div>
+                        <h4>Uncertainty Quantification</h4>
+                        <p>Rigorous estimation through ensemble spread analysis</p>
+                    </div>
+                    <div class="component-card">
+                        <div class="component-icon">LE</div>
+                        <h4>Large Ensemble</h4>
+                        <p>Robust statistical inference with computational resources</p>
+                    </div>
+                </div>
             </section>
 
+            <!-- Data Integration -->
             <section class="project-section">
-                <h2>Key Contributions</h2>
-                <ul>
-                    <li>Framework for evaluating data assimilation strategies in glaciological applications</li>
-                    <li>Insights into optimal observation strategies for glacier monitoring</li>
-                    <li>Improved understanding of uncertainty propagation in glacier predictions</li>
-                    <li>Transferable methodology applicable to other environmental prediction systems</li>
-                </ul>
+                <h2>Data Integration</h2>
+                <div class="data-flow">
+                    <div class="data-sources">
+                        <div class="data-item">
+                            <span class="data-icon">🛰</span>
+                            <span>Satellite Remote Sensing</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-icon">📍</span>
+                            <span>In-situ Field Measurements</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-icon">🌡</span>
+                            <span>Climate Reanalysis Data</span>
+                        </div>
+                    </div>
+                    <div class="data-arrow">⟶</div>
+                    <div class="data-center">
+                        <strong>Bayesian<br>Data Assimilation</strong>
+                    </div>
+                    <div class="data-arrow">⟶</div>
+                    <div class="data-output">
+                        <div class="data-item">
+                            <span class="data-icon">📊</span>
+                            <span>Mass Balance Predictions</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-icon">📈</span>
+                            <span>Uncertainty Estimates</span>
+                        </div>
+                    </div>
+                </div>
             </section>
 
+            <!-- Publication -->
             <section class="project-section">
                 <h2>Publication</h2>
-                <div class="pub-item">
+                <div class="pub-box">
                     <h4>Bayesian data assimilation on an Arctic glacier: learning from large ensemble twin experiments</h4>
                     <p><strong>Cao W</strong>, Aalstad K, Schmidt LS, Westermann S, Schuler TV · <em>Journal of Glaciology</em>, 2025</p>
                     <a href="https://doi.org/10.1017/jog.2025.10101" class="cta-button" target="_blank">Read Full Article</a>
