@@ -502,6 +502,16 @@ nav {
     animation: none;
 }
 
+.inline-link {
+    color: #0369a1;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.inline-link:hover {
+    text-decoration: underline;
+}
+
 /* Footer */
 footer {
     text-align: center;
