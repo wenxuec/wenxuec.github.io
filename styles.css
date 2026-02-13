@@ -660,30 +660,33 @@ nav {
 
 /* ESG Framework */
 .esg-framework {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 1.5rem;
-    position: relative;
-    padding: 3rem 0;
+    padding: 2rem 0;
 }
 
 .esg-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: linear-gradient(135deg, #0369a1, #0284c7);
     color: white;
     padding: 1.5rem;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    z-index: 10;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    box-shadow: 0 5px 20px rgba(3, 105, 161, 0.3);
+}
+
+.esg-items-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
 }
 
 .esg-item {
@@ -692,6 +695,12 @@ nav {
     padding: 1.5rem;
     text-align: center;
     border: 2px solid;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.esg-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .esg-e { border-color: #22c55e; }
@@ -826,14 +835,8 @@ nav {
         transform: rotate(90deg);
     }
 
-    .esg-framework {
+    .esg-items-row {
         grid-template-columns: 1fr;
-    }
-
-    .esg-center {
-        position: static;
-        transform: none;
-        margin: 0 auto 1.5rem;
     }
 
     .data-flow {
