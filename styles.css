@@ -367,7 +367,8 @@ nav {
 #contact {
     text-align: left;
     background: linear-gradient(180deg, #f8fafc 0%, #f0f9ff 100%);
-    max-width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 5rem 2rem;
 }
 
