@@ -228,45 +228,52 @@ nav {
     font-size: 0.9rem;
 }
 
-.about-sidebar {
-    display: flex;
-    flex-direction: column;
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-.experience-compact {
+.experience-card {
     background: white;
-    padding: 1.5rem;
+    padding: 1.75rem;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    border-left: 3px solid #0369a1;
 }
 
-.exp-item {
-    padding: 1rem 0;
-    border-bottom: 1px solid #e2e8f0;
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.9rem;
 }
 
-.exp-item:last-child {
-    border-bottom: none;
-}
-
-.exp-item strong {
-    display: block;
+.experience-card h3 {
+    font-size: 1rem;
     color: #0c4a6e;
-    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
 }
 
-.exp-item .exp-org {
+.exp-company {
     display: block;
     color: #0369a1;
     font-size: 0.85rem;
     font-weight: 500;
-    margin-top: 0.1rem;
 }
 
-.exp-item span:not(.exp-org) {
-    color: #64748b;
-    font-size: 0.9rem;
+.exp-period {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    margin-left: 1rem;
+}
+
+.experience-card p {
+    color: #475569;
+    font-size: 0.92rem;
+    line-height: 1.65;
 }
 
 /* Methodology Section */
