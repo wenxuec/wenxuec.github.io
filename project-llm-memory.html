@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compiling Intelligence: LLM-Generated Memory for Smarter Agents - Wenxue Cao</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SMKQGJEXE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0SMKQGJEXE');
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Article-specific styles */
+        .article-body {
+            max-width: 780px;
+            margin: 0 auto;
+            line-height: 1.85;
+            color: #1e293b;
+        }
+        .article-body p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+        .article-body h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #0c4a6e;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.4rem;
+        }
+        .article-body h3 {
+            margin-top: 1.8rem;
+            margin-bottom: 0.6rem;
+            color: #1e40af;
+            font-size: 1.1rem;
+        }
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .concept-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9;
+            border-radius: 0 8px 8px 0;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .concept-box strong {
+            display: block;
+            color: #0c4a6e;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .concept-box p {
+            margin: 0;
+            font-size: 0.97rem;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .comparison-card {
+            padding: 1.2rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .comparison-card.old {
+            background: #fff7f7;
+            border-color: #fecaca;
+        }
+        .comparison-card.new {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+        .comparison-card h4 {
+            margin: 0 0 0.6rem 0;
+            font-size: 0.95rem;
+        }
+        .comparison-card.old h4 { color: #dc2626; }
+        .comparison-card.new h4 { color: #16a34a; }
+        .comparison-card ul {
+            margin: 0;
+            padding-left: 1.2rem;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .comparison-card ul li {
+            margin-bottom: 0.3rem;
+        }
+        .memory-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .mem-node {
+            text-align: center;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            min-width: 110px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .mem-node.input { background: #dbeafe; color: #1e40af; border: 2px solid #93c5fd; }
+        .mem-node.process { background: #ede9fe; color: #5b21b6; border: 2px solid #c4b5fd; }
+        .mem-node.store { background: #d1fae5; color: #065f46; border: 2px solid #6ee7b7; }
+        .mem-node.retrieve { background: #fef3c7; color: #92400e; border: 2px solid #fcd34d; }
+        .mem-arrow { color: #94a3b8; font-size: 1.3rem; font-weight: bold; }
+        .ref-list {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ref-list h2 { margin-top: 0; }
+        .ref-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+        .ref-item:last-child { border-bottom: none; }
+        .ref-item a { color: #0c4a6e; }
+        .ref-item .ref-authors { color: #64748b; }
+        .system-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .system-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: #0c4a6e;
+            font-size: 1rem;
+        }
+        .system-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #374151;
+        }
+        .tag-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        @media print {
+            nav, footer, .back-link { display: none; }
+            .project-page { padding-top: 0; }
+            .article-body h2 { color: #0c4a6e !important; }
+            a[href]:after { content: " (" attr(href) ")"; font-size: 0.8em; color: #64748b; }
+        }
+        @media (max-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+            .memory-diagram { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Wenxue Cao</a>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#research">Research</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#publications">Publications</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="project-page">
+        <div class="project-header">
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+            <h1>Compiling Intelligence: LLM-Generated Memory for Smarter Agents</h1>
+            <p class="project-subtitle">Why machines should write their own context — and why it works better</p>
+        </div>
+
+        <div class="project-content">
+            <div class="article-body">
+
+                <div class="article-meta">
+                    <span>📅 April 2025</span>
+                    <span>✍️ Wenxue Cao</span>
+                    <span>🏷️ AI · LLM Agents · Memory Systems</span>
+                    <span><a href="javascript:window.print()" style="color:#0c4a6e;">🖨 Save as PDF</a></span>
+                </div>
+
+                <div class="tag-row">
+                    <span class="tag">LLM Agents</span>
+                    <span class="tag">Memory Architecture</span>
+                    <span class="tag">RAG</span>
+                    <span class="tag">MemGPT</span>
+                    <span class="tag">Reflexion</span>
+                    <span class="tag">Agent Harness</span>
+                </div>
+
+                <h2>The Amnesia Problem</h2>
+
+                <p>Every time you start a new conversation with an AI assistant, it forgets everything. Not just the last conversation — it forgets every conversation, every lesson learned, every mistake corrected. Andrej Karpathy captured this precisely when he described LLMs as suffering from <em>anterograde amnesia</em>: their weights are frozen at training time, and the context window — their working memory — resets to zero at the start of every session.</p>
+
+                <p>Karpathy's framing is illuminating: think of the LLM as a CPU, its context window as RAM, and its weights as slow, read-only storage. The problem is that this RAM is extremely limited — a few hundred thousand tokens at most — and is wiped clean between sessions. Everything a model "knows" about your specific project, preferences, or history has to be re-read from scratch every single time.</p>
+
+                <div class="concept-box">
+                    <strong>Karpathy's LLM OS Analogy (2023)</strong>
+                    <p>"The LLM is the CPU. The context window is RAM. The weights are disk — slow, read-only, and frozen. The agent needs an OS to manage memory across sessions."</p>
+                </div>
+
+                <p>This creates a fundamental inefficiency. To give a model the context it needs to function well on a long-running project, you either cram everything into a single enormous context window (slow, expensive, and often not even enough), or you build a retrieval system that pulls relevant pieces when needed. The second approach — Retrieval Augmented Generation (RAG) — has become the dominant solution. But as we'll see, it introduces its own serious limitations.</p>
+
+                <h2>Why Human-Built Knowledge Bases Fall Short</h2>
+
+                <p>RAG works by indexing a collection of documents and retrieving the most semantically similar chunks whenever the model needs information. It is a powerful technique, but its fundamental architecture is built for humans: the documents are written by humans, organised by humans, and indexed according to human-defined categories. The LLM is just a reader.</p>
+
+                <div class="comparison-grid">
+                    <div class="comparison-card old">
+                        <h4>❌ Traditional RAG</h4>
+                        <ul>
+                            <li>Static, read-only document index</li>
+                            <li>Written and organised by humans</li>
+                            <li>Retrieves on semantic similarity only</li>
+                            <li>No accumulation — every query starts fresh</li>
+                            <li>Misses non-obvious cross-references</li>
+                            <li>Knowledge never improves from usage</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card new">
+                        <h4>✅ LLM-Generated Memory</h4>
+                        <ul>
+                            <li>Dynamic, writable memory store</li>
+                            <li>Written and organised by the agent itself</li>
+                            <li>Retrieval informed by accumulated context</li>
+                            <li>Compounding — knowledge builds over time</li>
+                            <li>Cross-references created automatically</li>
+                            <li>Self-corrects as new information arrives</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p>The Letta team (creators of MemGPT) articulate the core architectural flaw of RAG clearly: it has no write path. Every query to a RAG system begins from the same fixed index. The system cannot learn that two seemingly unrelated documents are actually deeply connected, cannot flag contradictions discovered during a session, and cannot accumulate the kind of tacit understanding that makes an expert's knowledge qualitatively different from a beginner's.</p>
+
+                <p>But there is a deeper problem, one that is easy to overlook: human-written knowledge is optimised for human readers, not for LLMs. Humans write in narrative prose with cultural context, implicit assumptions, and rhetorical structure. An LLM reading such text must first decode all of that before it can extract the underlying information. This is inefficient, and it introduces noise — the model may focus on stylistic features rather than semantic content.</p>
+
+                <h2>The Core Insight: LLMs Should Write for Themselves</h2>
+
+                <p>The key insight that motivates a new generation of memory architectures is deceptively simple: <strong>memory generated by an LLM is more efficiently read by an LLM than memory written by a human.</strong></p>
+
+                <p>When an LLM writes a summary, a note, or a structured entry in its own knowledge base, it naturally organises information in the format it finds most useful for retrieval. It uses the vocabulary, abstraction level, and logical structure that maps most directly onto its own internal representations. Reading this back is fundamentally cheaper — in both computational and representational terms — than parsing human prose.</p>
+
+                <p>Karpathy formalised this in his proposal for an "LLM-maintained wiki": a structured Markdown knowledge base that an agent incrementally builds, updates, and cross-references. He draws a compelling analogy to compilation: raw documents are source code; the LLM-compiled wiki is the executable. You do not re-compile from source every time you run a program — you run the compiled artefact. Similarly, rather than re-reading source documents on every query, the agent reads and extends its own compiled knowledge.</p>
+
+                <div class="concept-box">
+                    <strong>The Compiler Analogy (Karpathy, 2025)</strong>
+                    <p>Raw documents are source code. The LLM-generated wiki is the compiled executable. RAG re-compiles from source on every query; agent memory runs the compiled artefact directly — faster, richer, and self-improving.</p>
+                </div>
+
+                <h2>Key Systems and Architectures</h2>
+
+                <p>Several research systems have independently converged on this insight, each approaching it from a different angle.</p>
+
+                <div class="memory-diagram">
+                    <div class="mem-node input">New Experience<br>or Information</div>
+                    <div class="mem-arrow">→</div>
+                    <div class="mem-node process">LLM Writes<br>Structured Note</div>
+                    <div class="mem-arrow">→</div>
+                    <div class="mem-node store">Persistent<br>Memory Store</div>
+                    <div class="mem-arrow">→</div>
+                    <div class="mem-node retrieve">LLM Retrieves<br>Own Context</div>
+                </div>
+
+                <div class="system-card">
+                    <h4>MemGPT: Virtual Context Management</h4>
+                    <p>Packer et al. (2023) drew directly on operating systems theory. Just as an OS manages a memory hierarchy — registers, RAM, disk — MemGPT gives an LLM agent a fast in-context tier (analogous to RAM) and a slower external storage tier (analogous to disk), with the LLM itself deciding what gets paged in and out via tool calls. This allows the agent to maintain coherent, long-term memory across sessions far exceeding the context window, without requiring the model to hold everything in working memory at once.</p>
+                </div>
+
+                <div class="system-card">
+                    <h4>Reflexion: Learning Through Verbal Self-Reflection</h4>
+                    <p>Shinn et al. (NeurIPS 2023) demonstrated that LLM-generated verbal reflections — written by the agent after a failed attempt — function as a more efficient form of memory than re-reading task specifications or external documentation. After each trial, the agent writes a self-critique in natural language, which is stored in an episodic memory buffer and re-injected as context in the next attempt. Reflexion achieved 91% pass@1 on HumanEval, surpassing GPT-4's 80%, purely through self-generated memory without any gradient updates or model retraining.</p>
+                </div>
+
+                <div class="system-card">
+                    <h4>A-MEM: Agentic Memory with Zettelkasten</h4>
+                    <p>Xu et al. (2025) drew on the Zettelkasten note-taking philosophy to build a self-organising memory network. When a new memory is stored, the agent automatically generates structured notes, keywords, and links to existing memories. Critically, it can retroactively update older memories as new information arrives — the knowledge base is never static but evolves through the agent's own operations, creating a living graph of interconnected knowledge that grows more useful over time.</p>
+                </div>
+
+                <div class="system-card">
+                    <h4>Harness Engineering: Externalising Cognitive Load</h4>
+                    <p>A 2026 survey on LLM agent design argues that the most significant capability gains in modern agents come not from changing model weights but from externalising cognitive load into memory stores, reusable skills, interaction protocols, and an orchestrating "harness." The harness is the infrastructure that manages when to read from memory, when to write, when to retrieve, and how to maintain coherent state across a long-running task — a role analogous to the operating system in classical computing.</p>
+                </div>
+
+                <h2>A Concrete Example: Claude Code's Memory System</h2>
+
+                <p>An instructive real-world example is the memory system used by Claude Code, Anthropic's AI coding assistant. Rather than asking the user to maintain a context document, or building a static knowledge base of project facts, Claude Code writes its own Markdown memory files as it works — capturing user preferences, project conventions, key decisions, and lessons learned. On subsequent sessions, it reads these self-generated files to restore context.</p>
+
+                <p>The files are structured, indexed, and written in a format the model finds easy to parse — not because a human designed that format, but because the model itself chose how to represent information when writing it. The result is faster context restoration, more accurate preference recall, and a compounding improvement in collaboration quality that a static RAG system could not achieve.</p>
+
+                <p>This is exactly the "compiled wiki" pattern: the agent acts as both writer and reader of its own knowledge base, continuously compiling raw experience into structured, efficiently retrievable memory.</p>
+
+                <h2>Why This Matters: Efficiency and the Retrieval Gap</h2>
+
+                <p>The efficiency argument runs deeper than just storage format. When an LLM reads a human-written document, it must spend representational capacity on parsing rhetorical structure, resolving ambiguity, handling implicit assumptions, and translating domain vocabulary. When it reads its own structured memory, much of this overhead is eliminated — the information is already in the form most directly useful for the task at hand.</p>
+
+                <p>The retrieval gap matters too. RAG retrieves on semantic similarity, which means it will miss information that is logically relevant but lexically distant — a connection between a constraint mentioned in one document and a design decision documented in another, for instance. An LLM-generated memory, built through active reasoning about the task, can create those cross-references explicitly at write time, so they are available at retrieval time without requiring complex re-reasoning.</p>
+
+                <p>The position paper on episodic memory (2025) frames this as the missing piece for long-term agents: biological episodic memory encodes specific past experiences in a way that can be retrieved and replayed. Current LLM systems lack this — they either re-derive knowledge from scratch (expensive and error-prone) or rely on static retrieval that misses the experiential dimension. LLM-generated memory is the closest computational analogue.</p>
+
+                <h2>Limitations and Open Questions</h2>
+
+                <p>LLM-generated memory is not without challenges. If the model writes incorrect information into its memory store, those errors persist and compound — the system may become confidently wrong over time. This "hallucination propagation" problem requires careful design: memory should ideally include confidence scores, source references, and mechanisms for detecting and correcting contradictions.</p>
+
+                <p>Scalability is another concern. As the memory store grows, retrieval must remain efficient. The A-MEM approach of maintaining explicit cross-reference links helps, but managing a large, self-organised knowledge graph at inference time is computationally non-trivial.</p>
+
+                <p>There is also the question of what the model does not know to write down. Human-designed knowledge bases benefit from expert curation — a domain expert knows which facts are important enough to document. An LLM agent writing its own memory may systematically under-represent certain types of information that it does not currently perceive as relevant but that will matter later.</p>
+
+                <h2>Conclusion</h2>
+
+                <p>The shift from human-built knowledge bases to LLM-generated memory represents a fundamental change in how we think about agent cognition. It moves the agent from a passive reader of externally organised information to an active author of its own context — compiling raw experience into structured, self-referential knowledge that grows more useful over time.</p>
+
+                <p>The analogy to compilation is apt: just as compiled code runs faster than interpreted code precisely because the hard work of translation has been done in advance, LLM-generated memory enables faster, more accurate reasoning because the hard work of contextualisation has already been done by the agent itself. The intelligence is not just in the model — it is increasingly in the harness that surrounds it.</p>
+
+                <p>As LLM agents take on longer-horizon tasks, the ability to build and maintain their own memory will become as important as the quality of the underlying model. The most capable agents of the near future will not be the ones with the largest context windows — they will be the ones that know best how to compile their own intelligence.</p>
+
+                <!-- References -->
+                <div class="ref-list">
+                    <h2>References</h2>
+
+                    <div class="ref-item">
+                        <strong>Karpathy, A. (2023).</strong> <em>LLM OS.</em> Twitter/X thread.
+                        <span class="ref-authors"> <a href="https://x.com/karpathy/status/1723140519554105733" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Karpathy, A. (2025).</strong> <em>llm-wiki: An LLM-maintained persistent wiki as an alternative to RAG.</em> GitHub Gist.
+                        <span class="ref-authors"> <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Packer, C., Fang, V., Patil, S. G., Lin, K., Wooders, S., & Gonzalez, J. E. (2023).</strong> <em>MemGPT: Towards LLMs as Operating Systems.</em> arXiv:2310.08560.
+                        <span class="ref-authors"> <a href="https://arxiv.org/abs/2310.08560" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Shinn, N., Cassano, F., Berman, E., Gopinath, A., Narasimhan, K., & Yao, S. (2023).</strong> <em>Reflexion: Language Agents with Verbal Reinforcement Learning.</em> NeurIPS 2023. arXiv:2303.11366.
+                        <span class="ref-authors"> <a href="https://arxiv.org/abs/2303.11366" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Xu, W., Liang, Z., Mei, K., Gao, H., Tan, J., & Zhang, Y. (2025).</strong> <em>A-MEM: Agentic Memory for LLM Agents.</em> arXiv:2502.12110.
+                        <span class="ref-authors"> <a href="https://arxiv.org/abs/2502.12110" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Letta Team (2024).</strong> <em>RAG is Not Agent Memory.</em> Letta Blog.
+                        <span class="ref-authors"> <a href="https://www.letta.com/blog/rag-vs-agent-memory" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Multiple authors (2026).</strong> <em>Externalization in LLM Agents: A Unified Review of Memory, Skills, Protocols and Harness Engineering.</em> arXiv:2604.08224.
+                        <span class="ref-authors"> <a href="https://arxiv.org/abs/2604.08224" target="_blank">↗ Link</a></span>
+                    </div>
+
+                    <div class="ref-item">
+                        <strong>Position paper (2025).</strong> <em>Episodic Memory is the Missing Piece for Long-Term LLM Agents.</em> arXiv:2502.06975.
+                        <span class="ref-authors"> <a href="https://arxiv.org/abs/2502.06975" target="_blank">↗ Link</a></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Wenxue Cao. All rights reserved.</p>
+    </footer>
+</body>
+</html>
