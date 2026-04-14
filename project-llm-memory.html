@@ -282,9 +282,7 @@
                     <p>"LLMs are a bit like a coworker with anterograde amnesia — they don't consolidate or build long-running knowledge or expertise once training is over, and all they have is short-term memory (context window)."</p>
                 </div>
 
-                <p>The analogy is precise. In the films <em>Memento</em> and <em>50 First Dates</em>, the protagonist must reconstruct their entire world from scratch at the start of each day. LLM agents face exactly this problem: their weights are frozen at training time, and the context window — their working memory — resets to zero at the start of every session. Think of the LLM as a CPU, the context window as RAM, and the weights as read-only disk storage. The RAM is fast but tiny, and it is wiped between sessions.</p>
-
-                <p>For years, the standard response to this problem was Retrieval Augmented Generation (RAG): index a human-built knowledge base and retrieve relevant chunks when the model needs information. It is a clever engineering workaround, but it treats the symptom rather than the cause — and as agents take on longer, more complex tasks, its limitations have become impossible to ignore.</p>
+                <p>The diagnosis is precise. LLM weights are frozen at training time, and the context window — the model's working memory — resets entirely at the start of every session. Whatever reasoning, corrections, or domain knowledge accumulated during a conversation is discarded. For years, the standard response to this structural limitation was Retrieval Augmented Generation (RAG): index a human-built knowledge base and retrieve relevant chunks on demand. It addressed the symptom without touching the underlying architecture — and as agents take on longer, more complex tasks, its limitations have become harder to ignore.</p>
 
                 <h2>Why RAG Is Not Enough</h2>
 
@@ -345,7 +343,7 @@
 
                 <p>When an LLM writes a summary, a structured note, or an entry in its own knowledge base, it naturally organises information in the format it finds most useful for retrieval — using the vocabulary, abstraction level, and logical structure that map most directly onto its own internal representations. Reading this back is fundamentally cheaper than parsing human prose.</p>
 
-                <p>Karpathy formalised this idea most precisely in his April 2026 GitHub Gist <em>llm-wiki</em>, which went viral with over 5,000 stars in 48 hours. He proposes replacing stateless RAG with an LLM-maintained wiki — a structured collection of Markdown files that an agent incrementally builds, cross-references, and keeps current. The analogy he draws is to compilation:</p>
+                <p>Karpathy formalised this idea in his April 2026 GitHub Gist <em>llm-wiki</em>. He proposes replacing stateless RAG with an LLM-maintained wiki — a structured collection of Markdown files that an agent incrementally builds, cross-references, and keeps current:</p>
 
                 <div class="x-quote">
                     <div class="x-author">Andrej Karpathy <span>· GitHub Gist "llm-wiki", April 2026</span></div>
@@ -353,7 +351,7 @@
                     <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank">↗ Read the Gist</a>
                 </div>
 
-                <p>The architecture is three-layer: <code>raw/</code> (immutable source documents) → <code>wiki/</code> (LLM-generated Markdown, continuously updated) → <code>CLAUDE.md</code> (schema and instructions for the agent). Raw documents are source code; the LLM-compiled wiki is the executable. You do not re-compile from source every time you run a program — you run the compiled artefact.</p>
+                <p>The proposed architecture is three-layer: <code>raw/</code> (immutable source documents) → <code>wiki/</code> (LLM-generated Markdown, continuously updated) → <code>CLAUDE.md</code> (schema and instructions for the agent). The agent reads from the wiki, not the raw sources — synthesis and cross-referencing are already done and stored, not repeated on every query.</p>
 
                 <p>The community response was immediate. Researcher Yuchen Jin wrote:</p>
 
@@ -457,11 +455,9 @@
 
                 <h2>Conclusion</h2>
 
-                <p>The shift from human-built knowledge bases to LLM-generated memory represents a fundamental change in how we think about agent cognition — one that the entire AI industry has now converged on simultaneously. OpenAI, Anthropic, Google, Letta, LangChain, and the open-source community are all building toward the same architecture: an agent that writes, organises, and retrieves its own memory, compounding knowledge over time rather than starting from scratch at every session.</p>
+                <p>The shift from human-built knowledge bases to LLM-generated memory represents a structural change in how capable agents are built — one the entire AI industry has now converged on simultaneously. OpenAI, Anthropic, Google, Letta, LangChain, and the open-source community are all building toward the same core architecture: an agent that writes, organises, and retrieves its own memory, compounding knowledge across sessions rather than starting from zero each time.</p>
 
-                <p>The compiler analogy remains the most useful frame. Just as compiled code runs faster than interpreted code because the hard work of translation has already been done, LLM-generated memory enables faster, more accurate reasoning because the hard work of contextualisation has already been done — by the agent itself, in a format it understands. The intelligence is not just in the model. It is increasingly in the harness, the memory, and the self-written context that surrounds it.</p>
-
-                <p>As Sam Altman wrote at the end of 2025: "2025 has seen the arrival of agents that can do real cognitive work." The agents that do that work best in 2026 will not be the ones with the largest context windows or the most parameters — they will be the ones that know best how to compile their own intelligence.</p>
+                <p>The competitive implication is clear. Performance differences between agents in 2026 are increasingly driven not by model size or parameter count, but by memory architecture and harness design. The Mem0 benchmark data shows an 18-point accuracy gap between RAG and full-context approaches — a gap that structured, LLM-generated memory can close at a fraction of the token cost. The intelligence is not just in the model weights. It is in what surrounds them: the memory system, the self-written context, and the engineering decisions that determine what the model knows at each step.</p>
 
                 <!-- References -->
                 <div class="ref-list">
