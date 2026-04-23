@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM as a Judge for AI Evaluation - Wenxue Cao</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SMKQGJEXE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0SMKQGJEXE');
+    </script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .article-body {
+            max-width: 780px;
+            margin: 0 auto;
+            line-height: 1.85;
+            color: #1e293b;
+        }
+        .article-body p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+        .article-body h2 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #0c4a6e;
+            font-size: 1.4rem;
+            border-bottom: 2px solid #e0f2fe;
+            padding-bottom: 0.4rem;
+        }
+        .article-body h3 {
+            margin-top: 1.8rem;
+            margin-bottom: 0.6rem;
+            color: #1e40af;
+            font-size: 1.1rem;
+        }
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tag-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .concept-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #0ea5e9;
+            border-radius: 0 8px 8px 0;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .concept-box strong {
+            display: block;
+            color: #0c4a6e;
+            margin-bottom: 0.4rem;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .concept-box p { margin: 0; font-size: 0.97rem; }
+        .phase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .phase-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .phase-card h4 {
+            margin: 0 0 0.4rem 0;
+            color: #0c4a6e;
+            font-size: 0.95rem;
+        }
+        .phase-card .phase-num {
+            display: inline-block;
+            background: #0ea5e9;
+            color: white;
+            border-radius: 4px;
+            padding: 0.05rem 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.4rem;
+        }
+        .phase-card p { margin: 0; font-size: 0.88rem; color: #374151; }
+        .design-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            font-size: 0.92rem;
+        }
+        .design-table th {
+            background: #0c4a6e;
+            color: white;
+            padding: 0.6rem 1rem;
+            text-align: left;
+        }
+        .design-table td {
+            padding: 0.55rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        .design-table tr:nth-child(even) { background: #f8fafc; }
+        .design-table td:first-child { font-weight: 600; color: #0c4a6e; white-space: nowrap; }
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .flow-node {
+            text-align: center;
+            padding: 0.7rem 0.9rem;
+            border-radius: 10px;
+            min-width: 100px;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .flow-node.input { background: #dbeafe; color: #1e40af; border: 2px solid #93c5fd; }
+        .flow-node.run { background: #ede9fe; color: #5b21b6; border: 2px solid #c4b5fd; }
+        .flow-node.judge { background: #fef3c7; color: #92400e; border: 2px solid #fcd34d; }
+        .flow-node.attr { background: #fde2e1; color: #b91c1c; border: 2px solid #fca5a5; }
+        .flow-node.out { background: #d1fae5; color: #065f46; border: 2px solid #6ee7b7; }
+        .flow-arrow { color: #94a3b8; font-size: 1.3rem; font-weight: bold; }
+        .github-box {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 1.3rem 1.6rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .github-box strong { color: #38bdf8; }
+        .github-box a {
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .github-box a:hover { background: #7dd3fc; }
+        .limit-list {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.3rem;
+            margin: 1.5rem 0;
+        }
+        .limit-list strong {
+            color: #92400e;
+            font-size: 0.88rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .limit-list ul { margin: 0.5rem 0 0 0; padding-left: 1.2rem; font-size: 0.95rem; }
+        .limit-list li { margin-bottom: 0.3rem; }
+        @media print {
+            nav, footer, .back-link { display: none; }
+            .project-page { padding-top: 0; }
+        }
+        @media (max-width: 600px) {
+            .phase-grid { grid-template-columns: 1fr; }
+            .flow-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Wenxue Cao</a>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#research">Research</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#publications">Publications</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="project-page">
+        <div class="project-header">
+            <a href="index.html#projects" class="back-link">← Back to Projects</a>
+            <h1>LLM as a Judge for AI Evaluation</h1>
+            <p class="project-subtitle">A reusable Claude Code skill for evaluating agentic AI systems — rubric design, bias-aware judge prompts, step attribution, and automatic re-evaluation</p>
+        </div>
+
+        <div class="project-content">
+            <div class="article-body">
+
+                <div class="article-meta">
+                    <span>📅 April 2026</span>
+                    <span>✍️ Wenxue Cao</span>
+                    <span>🏷️ AI Evaluation · LLM-as-Judge · Agentic Systems</span>
+                </div>
+
+                <div class="tag-row">
+                    <span class="tag">LLM-as-Judge</span>
+                    <span class="tag">Agent Evaluation</span>
+                    <span class="tag">Step Attribution</span>
+                    <span class="tag">Bias Mitigation</span>
+                    <span class="tag">Claude Code Skill</span>
+                    <span class="tag">Python</span>
+                </div>
+
+                <h2>The Evaluation Gap</h2>
+
+                <p>As agentic AI moves from demos into production, the hard question shifts from "can the model answer?" to "did the agent do the right thing, step by step, across a whole trajectory?" Classical metrics — accuracy, BLEU, exact-match — only reach single-turn outputs. They say nothing about whether a tool was called correctly, whether the agent gave up when it should have retried, or which specific step caused a failure three turns later.</p>
+
+                <p>Human review works but does not scale. Hand-labelling every trajectory is too slow for CI, too expensive for regression tests, and too inconsistent across reviewers to produce reliable trend data. This is the gap <strong>LLM-as-judge</strong> is meant to close: use a strong LLM to apply a fixed rubric at scale, with human calibration on a small labelled subset to keep the judge honest.</p>
+
+                <div class="concept-box">
+                    <strong>What this project is</strong>
+                    <p>A Claude Code skill — framework-agnostic, open-source, MIT-licensed — that walks the user through designing a rigorous evaluation for an agent or LLM application and emits a runnable Python harness. It is the workflow I want every AI team to have by default, codified as a reusable tool.</p>
+                </div>
+
+                <h2>Why LLM-as-Judge, and Where It Breaks</h2>
+
+                <p>The underlying idea is simple: write an explicit rubric, give it to a judge model along with the system's input, output, and trajectory, and ask for a structured verdict. Done well, it produces reproducible quality signals at a fraction of human review cost. Done carelessly, it produces confident but biased numbers that drift over time.</p>
+
+                <p>The failure modes are well-documented. Judges prefer whichever candidate appears first in a pairwise comparison. They rate longer outputs higher even when the extra content is wrong. They favour outputs from the same model family as themselves. They collapse to middle scores when uncertain rather than reading the trajectory carefully. None of these are model bugs — they are structural properties of using an LLM to score another LLM, and the only defence is a judge prompt explicitly designed around them.</p>
+
+                <h2>Six Phases, One Skill</h2>
+
+                <p>The skill is organised as a six-phase workflow. Each phase produces a concrete artefact in the user's project directory; nothing is left as advice.</p>
+
+                <div class="phase-grid">
+                    <div class="phase-card">
+                        <h4><span class="phase-num">1</span>Scope</h4>
+                        <p>Clarify what system is being evaluated, what "good" looks like, what ground truth is available, and the deployment context (research, production, regulated).</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4><span class="phase-num">2</span>Rubric Design</h4>
+                        <p>For each criterion: operational definition, step-level or trajectory-level, binary / 3-point / 5-point / numeric scale, failure modes caught, bias risks flagged.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4><span class="phase-num">3</span>Judge Prompts</h4>
+                        <p>One prompt per criterion. Role, definition, scale anchors, structured JSON output, rationale-before-score ordering. Bias controls baked in.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4><span class="phase-num">4</span>Harness Generation</h4>
+                        <p>Runnable Python harness on the Anthropic SDK. Runs judges against the dataset, writes structured JSON you can diff across releases.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4><span class="phase-num">5</span>Attribution &amp; Automation</h4>
+                        <p>Per-step influence weights for each criterion. Content-addressed cache so new examples run incrementally; a polling watcher re-triggers on change.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4><span class="phase-num">6</span>Calibration</h4>
+                        <p>20–50 human-labelled examples, Cohen's kappa (categorical) or Spearman (ordinal). Judge agreement below threshold sends you back to step 3.</p>
+                    </div>
+                </div>
+
+                <h2>Step Attribution: Finding the Critical Step</h2>
+
+                <p>Scoring steps in isolation is not enough. For an agent trajectory that ultimately fails, the deciding moment is often a single step — a typo in a tool argument, a premature give-up, a hallucinated tool name — and the remaining steps are either setup or consequence. The skill supports two attribution modes:</p>
+
+                <p><strong>Blame mode</strong> runs one extra judge call per trajectory per criterion. The judge reads the full trajectory and the final verdict, then assigns each step a weight in [−1.0, +1.0] and identifies a <code>critical_step</code>. Cheap, fast, soft — it is correlational and the judge is guessing at causation.</p>
+
+                <p><strong>Counterfactual mode</strong> is rigorous. For each step N, the agent is re-run from step N with that step masked or modified, the trajectory is re-scored, and the change in final score <em>is</em> the causal influence of step N. This is ablation analysis applied to agent trajectories. Expensive, opt-in, and only possible if the agent supports midpoint resume — a strong design constraint, but one worth paying for on high-stakes criteria like task success and safety.</p>
+
+                <h2>Incremental and Automatic Re-Evaluation</h2>
+
+                <p>A harness that re-runs every example on every invocation wastes compute and makes iteration painful. This one caches verdicts by content hash:</p>
+
+                <table class="design-table">
+                    <tr>
+                        <th>Hash</th>
+                        <th>Covers</th>
+                        <th>When it changes</th>
+                    </tr>
+                    <tr>
+                        <td>example_hash</td>
+                        <td>id + input + reference answer</td>
+                        <td>New or edited example added to the dataset</td>
+                    </tr>
+                    <tr>
+                        <td>rubric_hash</td>
+                        <td>judge model + all judge prompts + attribution prompt</td>
+                        <td>Any rubric or prompt edit</td>
+                    </tr>
+                </table>
+
+                <p>Adding a new example to the dataset re-runs only that example. Editing a judge prompt bumps the rubric hash and invalidates every cached verdict against it — so stale scores cannot ship. A companion <code>watch.py</code> polls the dataset and judge directory and re-invokes the eval when anything changes, without any external dependency. Drop a new example into the file, walk away, come back to the updated results.</p>
+
+                <div class="flow-row">
+                    <div class="flow-node input">Dataset<br>Example</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node run">Run Agent<br>(trajectory)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node judge">Per-Criterion<br>Judges</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node attr">Step<br>Attribution</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node out">Structured<br>JSON</div>
+                </div>
+
+                <h2>Design Principles</h2>
+
+                <p><strong>Rubric first, prompt second.</strong> Most eval failures are underspecified criteria, not bad prompts. The skill refuses to generate a judge before the rubric is explicit and measurable from the trajectory alone.</p>
+
+                <p><strong>Rationale before score.</strong> The judge is forced to write its reasoning before committing to a verdict. This small ordering change — from the G-Eval paper — turns the score from a gut reaction into a conclusion.</p>
+
+                <p><strong>Structured output, no free text.</strong> Every judge returns strict JSON with <code>rationale</code>, <code>score</code>, <code>ambiguous</code>, and <code>evidence</code> fields. A parseable verdict is the minimum requirement for a signal you can track over time.</p>
+
+                <p><strong>Calibration is mandatory.</strong> A judge that does not agree with human reviewers on a small labelled subset is not a judge — it is a random number generator with an API bill. The skill ships a calibration script that computes per-criterion agreement and flags criteria below threshold.</p>
+
+                <p><strong>Humans stay in the loop for safety.</strong> LLM judges are good enough to gate quality signals and catch regressions. They are not good enough to be the sole gate on a production release. The skill says this explicitly, in the documentation and in the generated report.</p>
+
+                <h2>Honest Limits</h2>
+
+                <div class="limit-list">
+                    <strong>What this skill does not do</strong>
+                    <ul>
+                        <li>Does not fine-tune a specialised judge model — relies on a strong base LLM with a good prompt.</li>
+                        <li>Does not replace human evaluation — calibration against human labels is required for any production use.</li>
+                        <li>Does not commit to a vendor framework — emits a plain Python harness, with notes on when to graduate to DeepEval, Inspect AI, or promptfoo.</li>
+                        <li>Does not do automatic midpoint replay for every agent — counterfactual attribution requires the agent to support resume from an arbitrary step, which is agent-specific.</li>
+                    </ul>
+                </div>
+
+                <h2>Why It Matters</h2>
+
+                <p>Evaluation is the quiet bottleneck of agentic AI deployment. A bank, hospital, or regulated institution cannot ship an agent it cannot measure, and it cannot measure what it cannot define. Turning ad-hoc "looks good to me" review into a repeatable pipeline — rubric, judges, calibration, attribution, regression tracking — is the engineering work that separates an impressive demo from a system that can be trusted in production.</p>
+
+                <p>This skill is the smallest, most transparent version of that pipeline I could build. It runs on one SDK, fits in a few hundred lines of Python, and is readable end to end. The aim is not to replace heavier frameworks but to give every team a clear starting point — and to make it cheap enough that designing an evaluation is no longer the reason an AI project stalls.</p>
+
+                <div class="github-box">
+                    <div>
+                        <strong>Open source.</strong> The full skill, templates, and harness are available on GitHub.
+                    </div>
+                    <a href="https://github.com/wenxuec/llm-judge" target="_blank">View on GitHub ↗</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Wenxue Cao. All rights reserved.</p>
+    </footer>
+</body>
+</html>
