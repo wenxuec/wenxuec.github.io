@@ -805,6 +805,65 @@ nav {
     margin: 0;
 }
 
+.esg-connect-note {
+    text-align: center;
+    color: #475569;
+    font-size: 0.9rem;
+    max-width: 620px;
+    margin: 0.5rem auto 0;
+    font-style: italic;
+}
+
+/* CCUS x ESG Connection Map */
+.connection-map {
+    display: grid;
+    grid-template-columns: 130px repeat(3, 1fr);
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+}
+
+.cmap-head {
+    font-weight: 600;
+    text-align: center;
+    padding: 0.6rem;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cmap-e { background: #22c55e; }
+.cmap-s { background: #f59e0b; }
+.cmap-g { background: #8b5cf6; }
+
+.cmap-stage {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #0c4a6e;
+    font-size: 0.9rem;
+    background: #f0f9ff;
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+
+.cmap-cell {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid;
+    border-radius: 8px;
+    padding: 0.75rem;
+    color: #475569;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.cell-e { border-left-color: #22c55e; }
+.cell-s { border-left-color: #f59e0b; }
+.cell-g { border-left-color: #8b5cf6; }
+
 /* Value Chain */
 .value-chain {
     display: flex;
@@ -920,6 +979,34 @@ nav {
     .theme-grid {
         grid-template-columns: 1fr;
     }
+
+    .connection-map {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+    }
+
+    .cmap-head {
+        display: none;
+    }
+
+    .cmap-stage {
+        margin-top: 1rem;
+        font-size: 1rem;
+    }
+
+    .cmap-cell::before {
+        content: attr(data-esg);
+        display: block;
+        font-weight: 600;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.25rem;
+    }
+
+    .cell-e::before { color: #22c55e; }
+    .cell-s::before { color: #f59e0b; }
+    .cell-g::before { color: #8b5cf6; }
 }
 
 /* Section background wrappers */
