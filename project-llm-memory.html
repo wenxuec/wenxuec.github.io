@@ -430,6 +430,12 @@
                     <p>A local MCP memory server compatible with Claude, Cursor, and Windsurf. All memory stored on your machine — nothing goes to the cloud. Exposes standardised tools: <code>add_memories</code>, <code>search_memory</code>, <code>list_memories</code>, <code>delete_all_memories</code>. Addresses the privacy gap that critics like Simon Willison identified in ChatGPT's opaque memory system.</p>
                 </div>
 
+                <div class="system-card">
+                    <span class="sys-date">Lin et al. (UC Berkeley / Letta) · April 2025</span>
+                    <h4>Sleep-Time Compute: Memory Work While the Agent Is Idle</h4>
+                    <p>If an agent writes its own memory, when should it do the writing? Sleep-time compute answers with an idea borrowed from biology. A second agent runs during idle periods, anticipating likely future queries and rewriting the primary agent's memory into what the authors call learned context, so heavy reasoning happens outside the user's latency window. The paper reports roughly 5x less test-time compute for equivalent accuracy on stateful reasoning benchmarks, with accuracy gains of up to 13 to 18% when sleep-time compute is scaled up. Memory consolidation becomes a background process, not something squeezed into the live conversation.</p>
+                </div>
+
                 <h2>A Concrete Example: Claude Code's Own Memory</h2>
 
                 <p>An instructive real-world example of LLM-generated memory is Claude Code's own memory system — which this very article was written using. Rather than asking the user to maintain a context document, Claude Code writes its own Markdown memory files as it works, capturing user preferences, project conventions, key decisions, and lessons learned. On subsequent sessions, it reads these self-generated files to restore context.</p>
@@ -450,7 +456,9 @@
 
                 <p>Rohit Ghumare's April 2026 extension of Karpathy's llm-wiki pattern addresses some of these directly, adding memory lifecycle management, confidence scoring, knowledge graphs, and forgetting curves — a direction that suggests the next generation of agent memory systems will be not just persistent, but actively maintained and curated by the agent itself.</p>
 
-                <p>There is also the question of what the agent does not know to write down. A human expert knows which facts are important enough to document; an LLM agent writing its own memory may systematically under-represent information that seems unimportant at write time but turns out to matter later. Solving this requires either proactive memory writing (anticipating future needs) or retroactive enrichment (updating memory when a past gap becomes apparent) — both of which A-MEM and similar systems have begun to address.</p>
+                <p>There is also the question of what the agent does not know to write down. A human expert knows which facts are important enough to document; an LLM agent writing its own memory may systematically under-represent information that seems unimportant at write time but turns out to matter later. Solving this requires either proactive memory writing (anticipating future needs) or retroactive enrichment (updating memory when a past gap becomes apparent) — both of which A-MEM and similar systems have begun to address. Sleep-time compute points at a third route. A background agent with idle compute can revisit its memory store, consolidate, prune, and enrich it before the gap ever surfaces in a live session.</p>
+
+                <p>By mid 2026 the research front has moved from bolt-on memory toward memory as a first-class system. A stream of preprints now treats the memory layer as its own operating system for agents, proposes agent-native memory architectures rather than adapters around a vector store, and builds dedicated long-horizon benchmarks to measure whether an agent genuinely accumulates expertise across sessions. The question is no longer whether agents should write their own memory. It is which architecture for doing so will win.</p>
 
                 <h2>Conclusion</h2>
 
@@ -544,6 +552,18 @@
                         <span class="ref-type paper">Paper</span>
                         <strong>Shinn, N. et al. (2023).</strong> <em>Reflexion: Language Agents with Verbal Reinforcement Learning.</em> NeurIPS 2023. arXiv:2303.11366.
                         <a href="https://arxiv.org/abs/2303.11366" target="_blank">↗ arxiv.org/abs/2303.11366</a>
+                    </div>
+
+                    <div class="ref-item">
+                        <span class="ref-type paper">Paper</span>
+                        <strong>Lin, K. et al. (2025).</strong> <em>Sleep-time Compute: Beyond Inference Scaling at Test-time.</em> arXiv:2504.13171.
+                        <a href="https://arxiv.org/abs/2504.13171" target="_blank">↗ arxiv.org/abs/2504.13171</a>
+                    </div>
+
+                    <div class="ref-item">
+                        <span class="ref-type blog">Blog</span>
+                        <strong>Letta (April 2025).</strong> <em>Sleep-time Compute.</em>
+                        <a href="https://www.letta.com/blog/sleep-time-compute" target="_blank">↗ letta.com/blog/sleep-time-compute</a>
                     </div>
 
                     <div class="ref-item">
