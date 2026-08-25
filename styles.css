@@ -57,20 +57,46 @@ nav {
     color: #0284c7;
 }
 
-/* Hero Section - Glacier Theme */
+/* Hero Section - Glacier Theme
+   Layered background: base gradient + topographic contour lines (glacier
+   elevation-map motif) + mountain ridge silhouette + soft vignette.
+   All inline SVG — no external image requests. */
 .hero {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 40%, #38bdf8 100%);
+    position: relative;
+    overflow: hidden;
     color: white;
     padding: 6rem 2rem 4rem;
+    background-color: #0c4a6e;
+    background-image:
+        radial-gradient(ellipse at 50% 40%, rgba(8, 47, 73, 0) 45%, rgba(8, 47, 73, 0.35) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0 224 L170 118 L320 196 L500 76 L690 188 L880 58 L1060 168 L1250 104 L1440 196 L1440 320 L0 320 Z'/%3E%3Cpath fill='%23ffffff' fill-opacity='0.09' d='M0 262 L230 184 L410 242 L630 152 L850 238 L1050 172 L1250 232 L1440 188 L1440 320 L0 320 Z'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 700' fill='none' stroke='%23ffffff' stroke-opacity='0.13' stroke-width='1.1'%3E%3Cellipse cx='460' cy='350' rx='70' ry='50' transform='rotate(-14 460 350)'/%3E%3Cellipse cx='452' cy='344' rx='132' ry='96' transform='rotate(-9 452 344)'/%3E%3Cellipse cx='458' cy='352' rx='198' ry='142' transform='rotate(-16 458 352)'/%3E%3Cellipse cx='448' cy='346' rx='268' ry='192' transform='rotate(-7 448 346)'/%3E%3Cellipse cx='456' cy='350' rx='340' ry='242' transform='rotate(-12 456 350)'/%3E%3Cellipse cx='450' cy='348' rx='415' ry='295' transform='rotate(-10 450 348)'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, #0c4a6e 0%, #0369a1 40%, #38bdf8 100%);
+    background-repeat: no-repeat;
+    background-position: center, bottom center, right -180px top -120px, center;
+    background-size: cover, 100% 32%, 950px auto, cover;
+}
+
+/* Fine film grain over the hero for texture */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.05;
+    pointer-events: none;
 }
 
 .hero-content {
     max-width: 900px;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .hero h1 {
